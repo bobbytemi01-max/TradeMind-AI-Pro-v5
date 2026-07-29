@@ -19,74 +19,147 @@ async def analyze_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("❌ Symbol not found.")
         return
 
-    reasons = "\n".join(f"• {r}" for r in result.get("reasons", []))
+    reasons = []
+
+    reasons.extend(result.get("institutional_reasons", []))
+    reasons.extend(result.get("candlestick_reasons", []))
+    reasons.extend(result.get("fusion_reasons", []))
+
+    reasons = list(dict.fromkeys(reasons))
+
+    tf = result.get("multi_timeframe", {})
+
+    def icon(name):
+        if name not in tf:
+            return "⚪"
+
+        bias = tf[name]["institutional"]
+
+        if "BULLISH" in bias:
+            return "🟢"
+
+        if "BEARISH" in bias:
+            return "🔴"
+
+        return "⚪"
 
     text = f"""
-🤖 <b>TradeMind AI PRO</b>
+🤖 <b>TradeMind AI PRO v7</b>
 
 🪙 <b>{symbol}/USD</b>
 
 ━━━━━━━━━━━━━━━━━━
 
-📈 <b>Recommendation</b>
+🚀 <b>Final Signal</b>
 
-{result["recommendation"]}
-
-🏆 <b>Trade Grade</b>
-
-{result["trade_grade"]}
-
-🧠 <b>AI Score</b>
-
-{result["score"]}/100
+{result.get("final_signal","WAIT")}
 
 🎯 <b>Confidence</b>
 
-{result["confidence"]}%
+{result.get("confidence_v2",0)}%
+({result.get("trade_grade_v2","-")})
 
-🌍 <b>Market Regime</b>
+━━━━━━━━━━━━━━━━━━
 
-{result["market_regime"]}
+🏦 <b>Institutional</b>
+
+{result.get("institutional_bias")}
+({result.get("institutional_score")})
+
+🕯️ <b>Candlestick</b>
+
+{result.get("candlestick_bias")}
+({result.get("candlestick_score")})
 
 ━━━━━━━━━━━━━━━━━━
 
 💼 <b>Trade Setup</b>
 
-Entry: ${result["entry"]:,.2f}
+Entry      : ${result.get("entry",0):,.2f}
+Stop Loss  : ${result.get("stop_loss",0):,.2f}
 
-Stop Loss: ${result["stop_loss"]:,.2f}
+TP1        : ${result.get("tp1",0):,.2f}
+TP2        : ${result.get("tp2",0):,.2f}
+TP3        : ${result.get("tp3",0):,.2f}
 
-TP1: ${result["tp1"]:,.2f}
-
-TP2: ${result["tp2"]:,.2f}
-
-TP3: ${result["tp3"]:,.2f}
-
-Risk / Reward: {result["risk_reward"]}
+Risk/Reward : {result.get("risk_reward",0)} : 1
 
 ━━━━━━━━━━━━━━━━━━
 
-📊 <b>Market Data</b>
+🎯 <b>Execution</b>
 
-Price: ${result["price"]:,.2f}
+Probability : {result.get("probability",0)}%
 
-RSI: {result["rsi"]:.2f}
+Rating      : {result.get("probability_rating","-")}
 
-EMA20: {result["ema20"]:,.2f}
+Confluence  : {result.get("confluence_score",0)}
 
-EMA50: {result["ema50"]:,.2f}
+Session     : {result.get("session","UNKNOWN")}
 
-EMA200: {result["ema200"]:,.2f}
+Status
 
-━━━━━━━━━━━━━━━━━━
-
-📝 <b>AI Reasons</b>
-
-{reasons}
+{result.get("execution_status","WAIT")}
 
 ━━━━━━━━━━━━━━━━━━
 
-🚀 <b>Powered by TradeMind AI Pro</b>
+🌍 <b>Multi-Timeframe</b>
+
+15m {icon("15m")}
+1H  {icon("1h")}
+4H  {icon("4h")}
+1D  {icon("1d")}
+
+Agreement: {tf.get("agreement",0)}/4
+
+━━━━━━━━━━━━━━━━━━
+
+📊 <b>Market Structure</b>
+
+Bias
+
+{result.get("institutional_bias")}
+({result.get("institutional_score")})
+
+Zone
+
+{result.get("premium_discount")}
+
+━━━━━━━━━━━━━━━━━━
+
+BOS              {"✅" if result.get("bos") else "❌"}
+CHoCH            {"✅" if result.get("choch") else "❌"}
+Fair Value Gap   {"✅" if result.get("fvg") else "❌"}
+Order Block      {"✅" if result.get("order_block") else "❌"}
+
+━━━━━━━━━━━━━━━━━━
+
+Equal Highs
+
+{"✅ " + str(result.get("equal_high_level")) if result.get("equal_highs") else "❌"}
+
+Equal Lows
+
+{"✅ " + str(result.get("equal_low_level")) if result.get("equal_lows") else "❌"}
+
+━━━━━━━━━━━━━━━━━━
+
+Nearest Liquidity
+
+{result.get("nearest_liquidity", {}).get("type","NONE")}
+
+Level
+
+{result.get("nearest_liquidity", {}).get("level","-")}
+
+━━━━━━━━━━━━━━━━━━
+
+📝 <b>Reasons</b>
+
+{"".join(f"• {r}\n" for r in reasons)}
+
+━━━━━━━━━━━━━━━━━━
+
+🚀 <b>TradeMind AI Pro v7</b>
 """
 
     await update.message.reply_text(

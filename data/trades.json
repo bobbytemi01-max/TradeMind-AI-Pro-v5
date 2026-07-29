@@ -1,0 +1,133 @@
+[
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 78,
+    "result": "WIN",
+    "status": "CLOSED"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "WAIT",
+    "confidence": 65,
+    "score": 50,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "WAIT",
+    "confidence": 65,
+    "score": 50,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 65,
+    "score": 50,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 65,
+    "score": 50,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 65,
+    "score": 50,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 65,
+    "score": 50,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 65,
+    "score": 50,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 65,
+    "score": 50,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 68,
+    "score": 68,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 83,
+    "score": 83,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "STRONG BUY",
+    "confidence": 83,
+    "score": 103,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 80,
+    "score": 85,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 80,
+    "score": 85,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "STRONG BUY",
+    "confidence": 83,
+    "score": 103,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "entry": 63000,
+    "stop_loss": 62000,
+    "tp1": 64000,
+    "tp2": 65000,
+    "tp3": 66000,
+    "confidence": 83,
+    "status": "OPEN",
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 65,
+    "score": 70,
+    "result": "PENDING"
+  },
+  {
+    "symbol": "BTC",
+    "signal": "BUY",
+    "confidence": 70,
+    "score": 75,
+    "result": "PENDING"
+  }
+]

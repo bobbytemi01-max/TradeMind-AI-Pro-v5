@@ -1,0 +1,40 @@
+from app.ai.learning.trade_logger import trade_logger
+
+
+class LearningEngine:
+
+    def analyze(self):
+
+        trades = trade_logger.load()
+
+        completed = [
+            t for t in trades
+            if t.get("result") in ("WIN", "LOSS")
+        ]
+
+        if not completed:
+            return {
+                "learning_ready": False,
+                "completed_trades": 0,
+                "overall_win_rate": 0,
+                "learning_message": "Not enough completed trades"
+            }
+
+        wins = sum(
+            1 for t in completed
+            if t["result"] == "WIN"
+        )
+
+        total = len(completed)
+
+        return {
+            "learning_ready": True,
+            "completed_trades": total,
+            "overall_win_rate": round(
+                wins / total * 100,
+                2
+            ),
+        }
+
+
+learning_engine = LearningEngine()

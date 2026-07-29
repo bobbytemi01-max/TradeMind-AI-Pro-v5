@@ -1,0 +1,178 @@
+"""
+TradeMind AI Pro Analyzer Service
+"""
+
+from app.services.market import market
+from app.services.indicators import indicator_service
+from app.services.trade_engine import trade_engine
+from app.ai.master.master_engine import master_engine
+
+from app.ai.consensus import consensus
+from app.ai.binary_engine import binary_engine
+from app.ai.institutional_engine import institutional_engine
+from app.ai.decision_engine import decision_engine
+
+from app.ai.candlestick.engine import candlestick_engine
+from app.ai.candlestick.scorer import candlestick_scorer
+from app.ai.multi_timeframe import multi_timeframe
+from app.ai.confidence_engine import confidence_engine
+from app.ai.signal_fusion import signal_fusion
+from app.ai.learning.trade_logger import trade_logger
+from app.ai.risk.manager import risk_manager
+
+from app.ai.execution.session_engine import session_engine
+from app.ai.execution.confluence_engine import confluence_engine
+from app.ai.execution.probability_engine import probability_engine
+from app.ai.execution.sniper_engine import sniper_engine
+from app.ai.smc.structure_engine import structure_engine
+
+
+class AnalyzerService:
+
+    def analyze(
+        self,
+        symbol: str,
+        period: str = "6mo",
+        interval: str = "1d"
+    ):
+
+        df = market.get_history(
+            symbol,
+            period=period,
+            interval=interval,
+        )
+
+        if df is None or df.empty:
+            return None
+
+        return self.analyze_dataframe(symbol, df)
+
+    def analyze_dataframe(self, symbol, df):
+
+        # Indicators
+        indicators = indicator_service.calculate(df)
+
+        # AI Consensus
+        ai = consensus.calculate(indicators)
+
+        # AI Decision
+        decision = decision_engine.decide(
+            indicators,
+            ai,
+        )
+
+        # Trade Plan
+        trade = trade_engine.build(
+            indicators,
+            ai,
+            decision,
+        )
+
+        structure = structure_engine.analyze(df)
+        candlestick = candlestick_engine.analyze(df)
+
+        binary = binary_engine.decide(indicators)
+
+        candle_score = candlestick_scorer.score(candlestick)
+
+        multi = multi_timeframe.analyze(symbol)
+
+        confidence = confidence_engine.calculate(
+            structure,
+            candle_score,
+            multi,
+        )
+
+        fusion = signal_fusion.decide(
+            structure,
+            candle_score,
+            confidence,
+        )
+
+        risk = risk_manager.build(
+            indicators,
+            structure,
+        )
+
+        session = session_engine.current()
+
+        confluence = confluence_engine.calculate(
+            structure,
+            candle_score,
+            confidence,
+            session,
+        )
+
+        probability = probability_engine.calculate(
+            confluence,
+        )
+
+        execution = sniper_engine.evaluate(
+            probability,
+        )
+
+        trade_logger.log({
+            "symbol": symbol.upper(),
+            "signal": fusion["final_signal"],
+            "confidence": confidence["confidence_v2"],
+            "score": fusion["fusion_score"],
+            "result": "PENDING",
+        })
+
+        # Final Result
+        result = {
+
+            "symbol": symbol.upper(),
+
+            # Indicators
+            **indicators,
+
+            # AI Scores
+            **ai,
+
+            # Decision
+            **decision,
+
+            # Trade
+            **trade,
+
+            # Master AI
+            **master,
+
+            # Smart Money Concepts
+            
+            
+
+            # Binary AI
+            **binary,
+
+            # Candlestick
+            **candle_score,
+
+            # Multi Timeframe
+            "multi_timeframe": multi,
+
+            # Confidence
+            
+
+            # Fusion
+            **fusion,
+
+            # Risk Manager
+            **risk,
+
+            # Execution
+            **session,
+            **confluence,
+            
+            
+
+            # Institutional AI
+            
+
+        }
+
+        return result
+
+
+analyzer = AnalyzerService()

@@ -37,6 +37,9 @@ from app.jobs.alert_job import alert_job
 from app.handlers.portfolio import portfolio
 from app.handlers.addtrade import addtrade
 from app.handlers.history import history
+from app.handlers.performance import performance
+from app.handlers.backtest import backtest
+from app.handlers.closetrade import closetrade
 from app.handlers.news import news
 from app.handlers.why import why
 from app.handlers.settings import settings
@@ -44,12 +47,15 @@ from app.jobs.alert_job import alert_job
 from app.handlers.portfolio import portfolio
 from app.handlers.addtrade import addtrade
 from app.handlers.history import history
+from app.handlers.performance import performance
+from app.handlers.backtest import backtest
 from app.handlers.help import help_command
 from app.handlers.price import price
 from app.handlers.analyze import analyze_command
 from app.handlers.signal import signal
 from app.handlers.dashboard import dashboard
 from app.handlers.chart import chart
+from app.handlers.opentrades import opentrades
 from app.handlers.scan import scan
 
 # ==========================
@@ -141,6 +147,10 @@ def main():
     app.add_handler(CommandHandler("portfolio", portfolio))
     app.add_handler(CommandHandler("addtrade", addtrade))
     app.add_handler(CommandHandler("history", history))
+    app.add_handler(CommandHandler("opentrades", opentrades))
+    app.add_handler(CommandHandler("performance", performance))
+    app.add_handler(CommandHandler("backtest", backtest))
+    app.add_handler(CommandHandler("closetrade", closetrade))
     app.add_handler(CommandHandler("news", news))
     app.add_handler(CommandHandler("why", why))
     app.add_handler(CommandHandler("settings", settings))

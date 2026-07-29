@@ -38,6 +38,10 @@ class IndicatorService:
             "bb_mid": bb_mid,
             "bb_low": bb_low,
 
+            "macd": macd_line,
+            "macd_signal": signal_line,
+            "macd_histogram": histogram,
+
             "adx": adx(df),
             "vwap": vwap(df),
 
@@ -45,6 +49,7 @@ class IndicatorService:
             "resistance": float(df["High"].tail(20).max()),
 
             "volume": float(df["Volume"].iloc[-1]),
+            "volume_sma": average_volume(df),
             "avg_volume": average_volume(df),
 
         }

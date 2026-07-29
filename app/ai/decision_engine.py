@@ -4,7 +4,6 @@ Decision Engine
 """
 
 from app.ai.market_regime import market_regime
-from app.ai.confidence_engine import confidence_engine
 
 
 class DecisionEngine:
@@ -18,7 +17,7 @@ class DecisionEngine:
     def decide(self, indicators, ai):
 
         score = ai.get("score", 50)
-        confidence = confidence_engine.calculate(ai)
+        confidence = ai.get('confidence', 50)
 
         regime = ai.get("market_regime", "⚪ Transition")
         bias = ai.get("market_bias", "NEUTRAL")

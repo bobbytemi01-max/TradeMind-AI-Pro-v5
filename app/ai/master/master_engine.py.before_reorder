@@ -1,0 +1,135 @@
+from app.ai.master.context_engine import context_engine
+from app.ai.master.decision_tree import decision_tree
+
+from app.ai.smc.structure_engine import structure_engine
+
+from app.ai.execution.session_engine import session_engine
+from app.ai.execution.confluence_engine import confluence_engine
+from app.ai.execution.probability_engine import probability_engine
+from app.ai.execution.sniper_engine import sniper_engine
+
+from app.ai.candlestick.engine import candlestick_engine
+from app.ai.candlestick.scorer import candlestick_scorer
+
+from app.ai.confidence_engine import confidence_engine
+from app.ai.multi_timeframe import multi_timeframe
+from app.ai.signal_fusion import signal_fusion
+
+from app.ai.risk.manager import risk_manager
+from app.ai.regime.engine import market_regime_engine
+from app.ai.regime.scorer import regime_scorer
+from app.ai.strategy.router import strategy_router
+from app.ai.learning.engine import learning_engine
+from app.ai.learning.scorer import learning_scorer
+
+
+class MasterEngine:
+
+    def analyze(
+        self,
+        symbol,
+        df,
+        indicators,
+    ):
+
+        structure = structure_engine.analyze(df)
+
+        candles = candlestick_engine.analyze(df)
+        candle_score = candlestick_scorer.score(candles)
+
+        multi = multi_timeframe.analyze(symbol)
+
+        fusion = signal_fusion.decide(
+            structure,
+            candle_score,
+            confidence,
+        )
+
+        session = session_engine.current()
+
+        confluence = confluence_engine.calculate(
+            structure,
+            candle_score,
+            confidence,
+            session,
+        )
+
+        probability = probability_engine.calculate(
+            confluence,
+        )
+
+        execution = sniper_engine.evaluate(
+            probability,
+        )
+
+        context = context_engine.analyze(
+            indicators,
+            structure,
+            multi,
+        )
+
+        regime = market_regime_engine.analyze(df)
+
+        regime_score = regime_scorer.score(
+            regime,
+        )
+
+
+        strategy = strategy_router.select(
+            regime,
+        )
+
+
+        learning = learning_engine.analyze()
+
+        learning_score = learning_scorer.score(
+            learning,
+        )
+
+
+        confidence = confidence_engine.calculate(
+            structure,
+            candle_score,
+            multi,
+            regime,
+            strategy,
+            learning,
+        )
+
+
+        decision = decision_tree.decide(
+            context,
+            structure,
+            probability,
+            regime,
+            strategy,
+        )
+
+        risk = risk_manager.build(
+            indicators,
+            structure,
+        )
+
+        return {
+            **structure,
+            **candles,
+            **candle_score,
+            **multi,
+            **confidence,
+            **fusion,
+            **session,
+            **confluence,
+            **probability,
+            **execution,
+            **context,
+            **regime,
+            **regime_score,
+            **strategy,
+            **learning,
+            **learning_score,
+            **decision,
+            **risk,
+        }
+
+
+master_engine = MasterEngine()
